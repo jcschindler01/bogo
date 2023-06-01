@@ -17,7 +17,9 @@ n = length N integer arrays of occupation numbers
 
 ## import
 import numpy as np
-import intertools
+import intertools as it
+from collections import Counter
+from scipy.special import factorial as fac
 
 
 ##### helper functions ######
@@ -43,10 +45,23 @@ def R(M):
 def ab(na,nb,R):
     """Calculate <na|nb> from local (a) to intermediate (b=Ra) modes."""
     
+    # Convert the states to set of how many operators
     sa = np.repeat(np.arange(len(na)) + 1, na)
     sb = np.repeat(np.arange(len(nb)) + 1, nb)
     
-    perm_sa = np.array(list(itertools.permutations(sa)))
+    # permutations of the first set
+    perm_sa = np.array(list(it.permutations(sa)))
+    counts = Counter(tuple(array) for array in perm)
+    # unique permutations
+    unique_perms = [np.array(arr) for arr in counts.keys()]
+    # how many times does each unique permutation appear?
+    counts = list(counts.values())
+    
+    facsa = np.array([fac(nai) for nai in na])
+    facsb = np.array([fac(nbi) for nbi in nb])
+    prefactor = 1/np.sqrt(np.prod(facsa)*np.prod(facsb))
+    
+    r = 1
     
     
     
