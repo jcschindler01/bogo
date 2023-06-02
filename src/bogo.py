@@ -44,14 +44,18 @@ def R(M):
 ## local to intermediate
 def ab(na,nb,R):
     """Calculate <na|nb> from local (a) to intermediate (b=Ra) modes."""
+    RR = R[1]
     
     # Convert the states to set of how many operators
-    sa = np.repeat(np.arange(len(na)) + 1, na)
-    sb = np.repeat(np.arange(len(nb)) + 1, nb)
+    sa = np.repeat(np.arange(len(na)), na)
+    sb = np.repeat(np.arange(len(nb)), nb)
+
+    if len(sa)!=len(sb):
+      return 0.
     
     # permutations of the first set
     perm_sa = np.array(list(it.permutations(sa)))
-    counts = Counter(tuple(array) for array in perm)
+    counts = Counter(tuple(array) for array in perm_sa)
     # unique permutations
     unique_perms = [np.array(arr) for arr in counts.keys()]
     # how many times does each unique permutation appear?
@@ -61,11 +65,15 @@ def ab(na,nb,R):
     facsb = np.array([fac(nbi) for nbi in nb])
     prefactor = 1/np.sqrt(np.prod(facsa)*np.prod(facsb))
     
-    r = 1
+    sum_result = 0
     
-    
-    
-    return 0
+    for k in range(len(unique_perms)):
+        r = 1
+        for i in range(len(unique_perms[k])):
+            r *= RR[sb[i]][unique_perms[k][i]]
+        sum_result += counts[k]*r
+
+    return prefactor*sum_result
 
 ## intermediate to global
 def bA(nb,nA,R):
@@ -99,8 +107,22 @@ def bA(nb,nA,R):
 
 
 ## local to global
-def ab(na,nA,R):
+def aA(na,nA,R):
     """Calculate <na|nb> from local (a) to global (A) modes."""
-    return 0
+    N = np.sum(na)
+    l = len(na)
+    
+    states = np.array(list(it.product(np.arange(N+1),repeat=l)))
+    states_in_subspace = []
+    
+    for state in states:
+        if np.sum(state)==N:
+            states_in_subspace.append(state)
+    subspace = np.array(states_in_subspace)
+    
+    f = np.array([ab(na,sb,R) for sb in subspace])
+    s = np.array([bA(sb,nA,R) for sb in subspace])
+
+    return np.dot(f,s)
 
 
