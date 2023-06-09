@@ -17,7 +17,7 @@ n = length N integer arrays of occupation numbers
 
 ## import
 import numpy as np
-import intertools as it
+import itertools as it
 from collections import Counter
 from scipy.special import factorial as fac
 
