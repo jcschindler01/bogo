@@ -100,8 +100,8 @@ def bA(nb,nA,R):
             return 0.
    
     inner = 1
-    for i in range(len(na)):
-        inner *= single(na[i],nb[i],R,i)
+    for i in range(len(nA)):
+        inner *= single(nA[i],nb[i],R,i)
     
     return inner
 
