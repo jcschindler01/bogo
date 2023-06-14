@@ -42,10 +42,12 @@ def R(M):
 ###########################################
 
 ## local to intermediate
-def ab(na,nb,R):
+def ab(na,nb,M):
     """Calculate <na|nb> from local (a) to intermediate (b=Ra) modes."""
-    RR = R[1]
-    
+    vals, vecs = np.linalg.eig(M)
+    sorted_indices = np.argsort(vals)
+    RR = vecs[:, sorted_indices].T
+
     # Convert the states to set of how many operators
     sa = np.repeat(np.arange(len(na)), na)
     sb = np.repeat(np.arange(len(nb)), nb)
@@ -76,12 +78,16 @@ def ab(na,nb,R):
     return prefactor*sum_result
 
 ## intermediate to global
-def bA(nb,nA,R):
+def bA(nb,nA,M):
     """Calculate <nb|nA> from intermediate (b) to global (A) modes."""
-    Omega = np.sqrt(R[0])
+    
+    vals, vecs = np.linalg.eig(M)
+    sorted_indices = np.argsort(vals)
+    R = vals[sorted_indices]   
+    Omega = np.sqrt(R)
     Eta = np.arctanh((Omega-1)/(Omega+1))
     
-    def single(n,m,R,i):
+    def single(n,m,i):
         omega = Omega[i]
         eta = Eta[i]
         
@@ -101,13 +107,13 @@ def bA(nb,nA,R):
    
     inner = 1
     for i in range(len(nA)):
-        inner *= single(nA[i],nb[i],R,i)
+        inner *= single(nA[i],nb[i],i)
     
     return inner
 
 
 ## local to global
-def aA(na,nA,R):
+def aA(na,nA,M):
     """Calculate <na|nb> from local (a) to global (A) modes."""
     N = np.sum(na)
     l = len(na)
@@ -120,8 +126,8 @@ def aA(na,nA,R):
             states_in_subspace.append(state)
     subspace = np.array(states_in_subspace)
     
-    f = np.array([ab(na,sb,R) for sb in subspace])
-    s = np.array([bA(sb,nA,R) for sb in subspace])
+    f = np.array([ab(na,sb,M) for sb in subspace])
+    s = np.array([bA(sb,nA,M) for sb in subspace])
 
     return np.dot(f,s)
 
