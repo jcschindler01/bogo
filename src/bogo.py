@@ -60,17 +60,23 @@ def ab(na,nb,M):
     
     sum_result = 0
     
+    #version 1 (the one we worked with in the meeting):
 #     for k in range(len(unique_perms)):
 #         r = 1
 #         for i in range(len(unique_perms[k])):
 #             r *= RR[sb[i]][unique_perms[k][i]]
 #         sum_result += counts[k]*r
+
+    #version 2:
+#     for i,uni in enumerate(unique_perms):
+#         r = 1
+#         for b,u in zip(sb,uni):
+#             r *= RR[b,u]
+#         sum_result += counts[i]*r 
     
+    #version 3:
     for i,uni in enumerate(unique_perms):
-        r = 1
-        for b,u in zip(sb,uni):
-            r *= RR[b,u]
-        sum_result += counts[i]*r    
+        sum_result += counts[i]*np.prod(np.array([RR[b,u] for b,u in zip(sb,uni)]))
     
 
     return prefactor*sum_result
