@@ -24,15 +24,6 @@ from scipy.special import factorial as fac
 
 ##### helper functions ######
 #############################
-
-# eigendecomposition of M (we don't want to include this process in each function!)
-def R(M):
-    vals, vecs = np.linalg.eig(M)
-    sorted_indices = np.argsort(vals)
-    sorted_eigenvalues = vals[sorted_indices]
-    sorted_eigenvectors = vecs[:, sorted_indices]
-
-    return sorted_eigenvalues, sorted_eigenvectors.T
     
 
 
@@ -69,11 +60,18 @@ def ab(na,nb,M):
     
     sum_result = 0
     
-    for k in range(len(unique_perms)):
+#     for k in range(len(unique_perms)):
+#         r = 1
+#         for i in range(len(unique_perms[k])):
+#             r *= RR[sb[i]][unique_perms[k][i]]
+#         sum_result += counts[k]*r
+    
+    for i,uni in enumerate(unique_perms):
         r = 1
-        for i in range(len(unique_perms[k])):
-            r *= RR[sb[i]][unique_perms[k][i]]
-        sum_result += counts[k]*r
+        for b,u in zip(sb,uni):
+            r *= RR[b,u]
+        sum_result += counts[i]*r    
+    
 
     return prefactor*sum_result
 
