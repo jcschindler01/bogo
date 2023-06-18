@@ -46,12 +46,22 @@ def ab(na,nb,M):
     if len(sa)!=len(sb):
       return 0.
     
-    # permutations of the first set
-    perm_sa = np.array(list(it.permutations(sa)))
-    counts = Counter(tuple(array) for array in perm_sa)
-    # unique permutations
-    unique_perms = [np.array(arr) for arr in counts.keys()]
-    # how many times does each unique permutation appear?
+    # version 1:
+#     # permutations of the first set
+#     perm_sa = np.array(list(it.permutations(sa)))
+#     counts = Counter(tuple(array) for array in perm_sa)
+#     # unique permutations
+#     unique_perms = [np.array(arr) for arr in counts.keys()]
+#     # how many times does each unique permutation appear?
+#     counts = list(counts.values())
+
+    # version 2:
+    counts = Counter()
+
+    for perm in it.permutations(sa):
+        counts[tuple(perm)] += 1
+
+    unique_perms = np.array(list(counts.keys()))
     counts = list(counts.values())
     
     facsa = np.array([fac(nai) for nai in na])
