@@ -65,10 +65,10 @@ def test2():
     print("TEST 2")
     print(test2.__doc__)
     ## params
-    mu = .1
-    na = na = np.array([6,0,0,0,0,0])
+    mu = 1e-12
+    na = np.array([6,0,0,0,0,0])
     ## optional random
-    if False:
+    if True:
         K = 6
         nmax = 3
         na = np.random.randint(0,nmax,K)
