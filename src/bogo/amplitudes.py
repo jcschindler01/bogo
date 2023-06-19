@@ -18,7 +18,8 @@ n = length N integer arrays of occupation numbers
 ## import
 import numpy as np
 from itertools import permutations as perm
-#from scipy.special import factorial as fac
+from itertools import combinations as combo
+from scipy.special import factorial as fac
 
 
 ##### helper functions ######
@@ -62,19 +63,25 @@ def ab(na,nb,M):
     ## orthogonal R diagonalizing classical M
     R = eig(M)[1]
 
-    ## sum over permutations of bfock
-    uniquep = set()
+    ## prefactor
+    Z = 1./np.sqrt(np.prod(fac(na)*fac(nb)))
+
+    ## iterate over bfock permutations
     for bf in perm(bfock):
-        # if bf not in uniquep:
-        #     uniquep.add(bf)
         #print(bf)
         #print([(afock[z],bf[z]) for z in range(N)])
         #print(np.array([R[afock[z],bf[z]] for z in range(N)]))
         #print(np.prod([R[afock[z],bf[z]] for z in range(N)]))
         amp += np.prod([R[afock[z],bf[z]] for z in range(N)])
 
+    ## more efficient using combos?
+    # indices = range(N)
+    # vals = np.zeros(len(N))
+    # for idA in combo(indices, na[0]):
+    #     indices.pop()
+
     ## return
-    return amp
+    return Z*amp
 
 ## intermediate to global
 def bA(nb,nA,R):

@@ -19,8 +19,8 @@ def test1():
     ## params
     N = 3
     mu = .1
-    na = np.array([9,0,0])
-    nb = np.array([1,1,7])
+    na = np.array([2,0,3])
+    nb = np.array([1,1,3])
     ## amp
     M = bg.V(N, mu)
     amp = bg.ab(na,nb,M)
@@ -43,10 +43,36 @@ def test1():
     print()
 
 
+def test2():
+    """
+    Check the probability distribution of n,m vectors for ab.
+    """
+    ##
+    print("TEST 2")
+    print(test1.__doc__)
+    ## params
+    K = 3
+    mu = .2
+    na = np.random.randint(0,4,K)
+    ## coupling
+    M = bg.V(K, mu)
+    ##
+    print("na = ", na)
+    ##
+    N = int(np.sum(na))
+    summed = 0
+    for nb1 in range(N+1)[::-1]:
+        for nb2 in range(N+1-nb1)[::-1]:
+            nb = np.array([nb1,nb2,N-nb1-nb2])
+            prob = np.abs(bg.ab(na,nb,M))**2
+            summed += prob
+            print(nb, "prob=% 5.3f, sum=% 5.3f"%(prob,summed))
+
+
 
 ##### run #####
 ###############
 
 if __name__=="__main__":
-    test1()
+    test2()
 
