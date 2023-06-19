@@ -68,7 +68,7 @@ def test2():
     mu = 1e-12
     na = np.array([6,0,0,0,0,0])
     ## optional random
-    if True:
+    if False:
         K = 6
         nmax = 3
         na = np.random.randint(0,nmax,K)
