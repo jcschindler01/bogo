@@ -71,21 +71,26 @@ def ab(na,nb,M):
 
     ## iterate over bfock permutations
     for bf in mperm(bfock):
-        print(bf)
-        print([(afock[z],bf[z]) for z in range(N)])
-        print(np.array([R[afock[z],bf[z]] for z in range(N)]))
-        print(sym)
-        print(sym * np.prod([R[afock[z],bf[z]] for z in range(N)]))
         amp += sym * np.prod([R[afock[z],bf[z]] for z in range(N)])
-
-    ## more efficient using combos?
-    # indices = range(N)
-    # vals = np.zeros(len(N))
-    # for idA in combo(indices, na[0]):
-    #     indices.pop()
 
     ## return
     return Z*amp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## intermediate to global
 def bA(nb,nA,R):

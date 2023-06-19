@@ -2,6 +2,7 @@
 ## import
 import numpy as np
 import bogo as bg
+from itertools import product as itprod
 np.set_printoptions(precision=3, suppress=True)
 
 ##### tests #####
@@ -42,34 +43,52 @@ def test1():
     print("|<na|mb>|^2 = %8.3e"%(np.abs(amp)**2))
     print()
 
-
 def test2():
     """
     Check the probability distribution of n,m vectors for ab.
+    For fixed state <na| calculate all nonzero <na|nb> amplitudes.
+    The state is either manual or random.
+
+    Benchmarks:
+    Time to calculate all nonzero amplitudes.
+    (NxK = excitations x modes)
+    6x6  = 2s       [na = np.array([6,0,0,0,0,0])]
+    15x2 = 1s       [na = np.array([15,0])]
+    7x7  = 15s      [na = np.array([7,0,0,0,0,0,0])]
+    20x2 = 15s      [na = np.array([20,0])]
+
+    Probably now limited by actualy python looping speed over 
+    multiperms (n!/nb!..nb!) and over valid out states (K!).
+
     """
     ##
     print("TEST 2")
-    print(test1.__doc__)
+    print(test2.__doc__)
     ## params
-    K = 3
-    mu = .2
-    na = np.random.randint(0,4,K)
-    ## coupling
+    mu = .1
+    na = np.array([15,0])
+    ## optional random
+    if False:
+        K = 6
+        nmax = 3
+        na = np.random.randint(0,nmax,K)
+    ## derived
+    K = len(na)
+    N = int(np.sum(na))
     M = bg.V(K, mu)
     ##
-    print("na = ", na)
+    nbs = itprod(range(0,N+1), repeat=K)
+    nbs = (x for x in nbs if np.sum(x)==N)
+    summed = 0.0
     ##
-    N = int(np.sum(na))
-    summed = 0
-    for nb1 in range(N+1)[::-1]:
-        for nb2 in range(N+1-nb1)[::-1]:
-            nb = np.array([nb1,nb2,N-nb1-nb2])
-            prob = np.abs(bg.ab(na,nb,M))**2
-            summed += prob
-            print(nb, "prob=% 5.3f, sum=% 5.3f"%(prob,summed))
+    print("na = ", na)
+    for nb in nbs:
+        prob = np.abs(bg.ab(na,nb,M))**2
+        summed += prob
+        print(nb, "prob=% 8.6f, sum=% 5.3f"%(prob,summed))
+    print("na = ", na)
+    print()
 
-def test3():
-    pass
 
 
 ##### run #####
