@@ -19,7 +19,7 @@ def test1():
     ## params
     N = 3
     mu = .1
-    na = np.array([2,0,3])
+    na = np.array([1,0,4])
     nb = np.array([1,1,3])
     ## amp
     M = bg.V(N, mu)
@@ -68,6 +68,8 @@ def test2():
             summed += prob
             print(nb, "prob=% 5.3f, sum=% 5.3f"%(prob,summed))
 
+def test3():
+    pass
 
 
 ##### run #####

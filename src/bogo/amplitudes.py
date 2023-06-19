@@ -17,10 +17,10 @@ n = length N integer arrays of occupation numbers
 
 ## import
 import numpy as np
-from itertools import permutations as perm
-from itertools import combinations as combo
 from scipy.special import factorial as fac
 
+from itertools import permutations as perm
+from sympy.utilities.iterables import multiset_permutations as mperm
 
 ##### helper functions ######
 #############################
@@ -66,13 +66,17 @@ def ab(na,nb,M):
     ## prefactor
     Z = 1./np.sqrt(np.prod(fac(na)*fac(nb)))
 
+    ## multipermution symmetry factor (perms = sym*mperms)
+    sym = np.prod(fac(nb))
+
     ## iterate over bfock permutations
-    for bf in perm(bfock):
-        #print(bf)
-        #print([(afock[z],bf[z]) for z in range(N)])
-        #print(np.array([R[afock[z],bf[z]] for z in range(N)]))
-        #print(np.prod([R[afock[z],bf[z]] for z in range(N)]))
-        amp += np.prod([R[afock[z],bf[z]] for z in range(N)])
+    for bf in mperm(bfock):
+        print(bf)
+        print([(afock[z],bf[z]) for z in range(N)])
+        print(np.array([R[afock[z],bf[z]] for z in range(N)]))
+        print(sym)
+        print(sym * np.prod([R[afock[z],bf[z]] for z in range(N)]))
+        amp += sym * np.prod([R[afock[z],bf[z]] for z in range(N)])
 
     ## more efficient using combos?
     # indices = range(N)
