@@ -2,10 +2,7 @@
 ## import
 import numpy as np
 import bogo as bg
-
-## classical coupling matrix
-def Mpot(mu):
-    return np.array([[1, -mu],[-mu, 1]])
+np.set_printoptions(precision=3, suppress=True)
 
 ##### tests #####
 #################
@@ -13,15 +10,37 @@ def Mpot(mu):
 def test1():
     """
     Test ab, the "orthogonal" part of transformation.
+    This amplitude is total N conserving.
+    It is derived by Wick's theorem.
     """
+    ##
+    print("TEST 1")
+    print(test1.__doc__)
     ## params
-    mu = 0.1
-    na = np.array([3,0])
-    nb = np.array([2,1])
+    N = 3
+    mu = .1
+    na = np.array([9,0,0])
+    nb = np.array([1,1,7])
     ## amp
-    M = Mpot(mu)
+    M = bg.V(N, mu)
     amp = bg.ab(na,nb,M)
-    print(amp)
+    print(repr(amp))
+    return None
+    print("N, mu = %d, %f"%(N, mu))
+    print("M =")
+    print(M)
+    print("Mvals = ")
+    print(bg.eig(M)[0])
+    print("Mvecs = ")
+    print(bg.eig(M)[1])
+    print()
+    print("na, nb = ")
+    print(na)
+    print(nb)
+    print()
+    print("         ab = %8.3e"%amp)
+    print("|<na|mb>|^2 = %8.3e"%(np.abs(amp)**2))
+    print()
 
 
 
@@ -30,33 +49,4 @@ def test1():
 
 if __name__=="__main__":
     test1()
-
-
-# ## coupling
-# mu = 0.25
-# M = np.array([[1, -mu],[-mu, 1]])
-
-# ## occupation numbers
-# na = np.array([0,0])
-# nb = np.array([1,2])
-# # nA = np.array([1,2])
-
-# ## calculate
-# ab = bg.ab(na,nb,M=M)
-# # bA = bg.bA(nb,nA,M=M)
-# # aA = bg.aA(na,nA,M=M)
-
-
-# ## results
-# print()
-# print("M =")
-# print(M)
-# print()
-# print("na = %s"%(na))
-# print("nb = %s"%(nb))
-# # print("nA = %s"%(na))
-# print()
-# print(" <na|nb>    = %.3f"%(ab))
-# print("|<na|nb>|^2 = %.3f"%(np.abs(ab)**2))
-# print()
 

@@ -17,24 +17,21 @@ n = length N integer arrays of occupation numbers
 
 ## import
 import numpy as np
-import itertools as it
-from collections import Counter
-from scipy.special import factorial as fac
+from itertools import permutations as perm
+#from scipy.special import factorial as fac
 
 
 ##### helper functions ######
 #############################
 
-# eigendecomposition of M (we don't want to include this process in each function!)
-def R(M):
+def eig(M):
+    """ Sorted eigendecomposition."""
     vals, vecs = np.linalg.eig(M)
-    sorted_indices = np.argsort(vals)
-    sorted_eigenvalues = vals[sorted_indices]
-    sorted_eigenvectors = vecs[:, sorted_indices]
-
-    return sorted_eigenvalues, sorted_eigenvectors.T
+    sort_idx = np.argsort(vals)
+    sort_vals = vals[sort_idx]
+    sort_vecs = vecs[:, sort_idx]
+    return sort_vals, sort_vecs.T
     
-
 
 
 
@@ -42,38 +39,42 @@ def R(M):
 ###########################################
 
 ## local to intermediate
-def ab(na,nb,R):
-    """Calculate <na|nb> from local (a) to intermediate (b=Ra) modes."""
-    RR = R[1]
+def ab(na,nb,M):
+    """
+    Calculate <na|nb> from local (a) to intermediate (b=Ra) modes.
     
-    # Convert the states to set of how many operators
-    sa = np.repeat(np.arange(len(na)), na)
-    sb = np.repeat(np.arange(len(nb)), nb)
+    amp = sum_{complete wick contractions} R_{i,j}*...*R_{i,j}
+    """
+    ## initialize amp
+    amp = 0.0 + 0.0j
 
-    if len(sa)!=len(sb):
-      return 0.
-    
-    # permutations of the first set
-    perm_sa = np.array(list(it.permutations(sa)))
-    counts = Counter(tuple(array) for array in perm_sa)
-    # unique permutations
-    unique_perms = [np.array(arr) for arr in counts.keys()]
-    # how many times does each unique permutation appear?
-    counts = list(counts.values())
-    
-    facsa = np.array([fac(nai) for nai in na])
-    facsb = np.array([fac(nbi) for nbi in nb])
-    prefactor = 1/np.sqrt(np.prod(facsa)*np.prod(facsb))
-    
-    sum_result = 0
-    
-    for k in range(len(unique_perms)):
-        r = 1
-        for i in range(len(unique_perms[k])):
-            r *= RR[sb[i]][unique_perms[k][i]]
-        sum_result += counts[k]*r
+    ## total particle number
+    N = np.sum(na)
 
-    return prefactor*sum_result
+    ## zero unless N=M
+    if not np.sum(nb)==N:
+        return amp
+
+    ## number rep to fock rep
+    afock = np.repeat(range(len(na)), na)
+    bfock = np.repeat(range(len(nb)), nb)
+
+    ## orthogonal R diagonalizing classical M
+    R = eig(M)[1]
+
+    ## sum over permutations of bfock
+    uniquep = set()
+    for bf in perm(bfock):
+        # if bf not in uniquep:
+        #     uniquep.add(bf)
+        #print(bf)
+        #print([(afock[z],bf[z]) for z in range(N)])
+        #print(np.array([R[afock[z],bf[z]] for z in range(N)]))
+        #print(np.prod([R[afock[z],bf[z]] for z in range(N)]))
+        amp += np.prod([R[afock[z],bf[z]] for z in range(N)])
+
+    ## return
+    return amp
 
 ## intermediate to global
 def bA(nb,nA,R):
