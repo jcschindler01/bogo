@@ -18,8 +18,6 @@ n = length N integer arrays of occupation numbers
 ## import
 import numpy as np
 from scipy.special import factorial as fac
-
-from itertools import permutations as perm
 from sympy.utilities.iterables import multiset_permutations as mperm
 
 ##### helper functions ######
@@ -32,8 +30,6 @@ def eig(M):
     sort_vals = vals[sort_idx]
     sort_vecs = vecs[:, sort_idx]
     return sort_vals, sort_vecs.T
-    
-
 
 
 ############## amplitudes #################
@@ -77,69 +73,19 @@ def ab(na,nb,M):
     return Z*amp
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## intermediate to global
 def bA(nb,nA,R):
     """Calculate <nb|nA> from intermediate (b) to global (A) modes."""
-    Omega = np.sqrt(R[0])
-    Eta = np.arctanh((Omega-1)/(Omega+1))
-    
-    def single(n,m,R,i):
-        omega = Omega[i]
-        eta = Eta[i]
-        
-        if (n%2)==(m%2):
-            Min = min(n,m)
-            if n%2 == 0:
-                K = np.arange(0,Min+1,2)
-            if n%2 ==1:
-                K = np.arange(1,Min+1,2)
-            prefactor = (np.sqrt(fac(m)*fac(n)))/((np.cosh(eta))**((n+m+1)/2))
-            terms = np.array([(((np.sinh(eta))/2)**((n+m-2*k)/2))*(((-1)**((n-k)/2))/(fac(k)*fac(int((n-k)/2))*fac(int((m-k)/2)))) for k in K])
-            sum = np.sum(terms)
-            inner_single = prefactor*sum
-            return inner_single
-        else:
-            return 0.
-   
-    inner = 1
-    for i in range(len(nA)):
-        inner *= single(nA[i],nb[i],R,i)
-    
-    return inner
+    ##
+    amp = 0.0 + 0.0j
+    ## return
+    return amp
 
 
 ## local to global
 def aA(na,nA,R):
     """Calculate <na|nb> from local (a) to global (A) modes."""
-    N = np.sum(na)
-    l = len(na)
-    
-    states = np.array(list(it.product(np.arange(N+1),repeat=l)))
-    states_in_subspace = []
-    
-    for state in states:
-        if np.sum(state)==N:
-            states_in_subspace.append(state)
-    subspace = np.array(states_in_subspace)
-    
-    f = np.array([ab(na,sb,R) for sb in subspace])
-    s = np.array([bA(sb,nA,R) for sb in subspace])
-
-    return np.dot(f,s)
-
-
+    ##
+    amp = 0.0 + 0.0j
+    ## return
+    return amp

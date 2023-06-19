@@ -66,7 +66,7 @@ def test2():
     print(test2.__doc__)
     ## params
     mu = .1
-    na = np.array([15,0])
+    na = na = np.array([6,0,0,0,0,0])
     ## optional random
     if False:
         K = 6
