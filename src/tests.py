@@ -58,7 +58,7 @@ def test2():
     20x2 = 15s      [na = np.array([20,0])]
 
     Probably now limited by actualy python looping speed over 
-    multiperms (n!/nb!..nb!) and over valid out states (K!).
+    multiperms (n!/nb!..nb!) and over valid out states (?).
 
     """
     ##
