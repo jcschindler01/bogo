@@ -3,6 +3,7 @@
 # multipermute.py - permutations of a multiset
 # Erik Garrison <erik.garrison@bc.edu> 2010
 
+## https://github.com/ekg/multipermute/blob/master/multipermute.py
 """
 This module encodes functions to generate the permutations of a multiset
 following this algorithm:
