@@ -136,10 +136,13 @@ def test3():
 def test4():
     """
     For fixed state |nA> calculate <nb|nA> amplitudes
-    for all <nb| with up to Na+Ncut particles.
+    for all <nb| with up to N+Ncut particles.
+    Reports remainder = total prob of more than N+Ncut particles.
 
     Benchmarks:
-    none yet
+    [5.2s] mu=.5, na=4,4,0,0, Ncutoff=8, remainder=2e-12
+    [<1s ] mu=.5, na=0,0,0,0, Ncutoff=0, remainder=3e-2
+    [<1s ] mu=.5, na=50, Ncutoff=60, remainder=6e-2
 
     Prints only probs greater than or equal to eps.
     """
@@ -147,10 +150,10 @@ def test4():
     print("TEST 4")
     print(test4.__doc__)
     ## params
-    mu = 1
-    nA = np.array([4,4,0,0])
-    Ncut = 8
-    eps = 0
+    mu = .5
+    nA = np.array([50])
+    Ncut = 10
+    eps = 1e-6
     ## optional random
     if False:
         K = 6
@@ -165,7 +168,6 @@ def test4():
     nbs = itprod(range(0,Ncutoff+1), repeat=K)
     summed = 0.0
     ##
-    eps = 1e-9
     print("nA = ", nA)
     for nb in nbs:
         prob = np.abs(bg.bA(nb,nA,M))**2
