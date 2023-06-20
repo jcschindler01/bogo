@@ -12,7 +12,7 @@ A = global creation operators
 
 n = length N integer arrays of occupation numbers
 
-(--> canonical ordering of n?)
+(Global n ordered from low frequency (left/0) to high freq (right/N))
 """
 
 ## import
