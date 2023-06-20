@@ -18,7 +18,10 @@ n = length N integer arrays of occupation numbers
 ## import
 import numpy as np
 from scipy.special import factorial as fac
-from sympy.utilities.iterables import multiset_permutations as mperm
+#from sympy.utilities.iterables import multiset_permutations as mperm
+from bogo.multipermute import permutations as mperm
+
+
 
 ##### helper functions ######
 #############################
