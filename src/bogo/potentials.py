@@ -82,12 +82,12 @@ def Vij_open(N, mu=0.2):
     return Vij_closed(N,x=x)  - mu * firstlast_ones(N)
 
 
-def V(N=2, mu=.2, mode="closed"):
-    if mode=="closed":
+def V(N=2, mu=.2, bcs="closed"):
+    if bcs=="closed":
         return Vij_closed(N, mu)
-    if mode=="open":
+    if bcs=="open":
         return Vij_open(N, mu)
-    if mode=="periodic":
+    if bcs=="periodic":
         return Vij_periodic(N, mu)
 
 
