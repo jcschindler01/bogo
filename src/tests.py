@@ -25,8 +25,6 @@ def test1():
     ## amp
     M = bg.V(N, mu)
     amp = bg.ab(na,nb,M)
-    print(repr(amp))
-    return None
     print("N, mu = %d, %f"%(N, mu))
     print("M =")
     print(M)
@@ -66,7 +64,7 @@ def test2():
     print(test2.__doc__)
     ## params
     mu = .2
-    na = np.array([7,0,0,0,0,0,0])
+    na = np.array([6,0,0,0,0,0])
     ## optional random
     if False:
         K = 6
@@ -90,10 +88,102 @@ def test2():
     print()
 
 
+def test3():
+    """
+    Test bA, the "squeezing" part of transformation.
+    Each mode is individually squeezed.
+    Not N preserving, but modes are decoupled.
+    """
+    ##
+    print("TEST 3")
+    print(test3.__doc__)
+    ## params
+    mu = 1
+    nb = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0])
+    nA = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0])
+    ## amp
+    K = len(nb)
+    M = bg.V(K, mu)
+    ##
+    vals, vecs = bg.eig(M)
+    w = np.sqrt(vals)
+    r = np.arctanh((w-1)/(w+1))
+    ##
+    amp = bg.bA(nb,nA,M)
+    ##
+    print("K, mu = %d, %f"%(K, mu))
+    print("M =")
+    print(M)
+    print("Mvecs = ")
+    print(vecs)
+    print("Mvals = ")
+    print(vals)
+    print("w = ")
+    print(w)
+    print("r = ")
+    print(r)
+    print()
+    print("nb, nA = ")
+    print(nb)
+    print(nA)
+    print()
+    print("         bA = %8.3e"%(amp))
+    print("|<nb|nA>|^2 = %8.3e"%(np.abs(amp)**2))
+    print()
+
+
+
+def test4():
+    """
+    For fixed state |nA> calculate <nb|nA> amplitudes
+    for all <nb| with up to Na+Ncut particles.
+
+    Benchmarks:
+    none yet
+
+    Prints only probs greater than or equal to eps.
+    """
+    ##
+    print("TEST 4")
+    print(test4.__doc__)
+    ## params
+    mu = 1
+    nA = np.array([4,4,0,0])
+    Ncut = 8
+    eps = 0
+    ## optional random
+    if False:
+        K = 6
+        nmax = 3
+        na = np.random.randint(0,nmax,K)
+    ## derived
+    K = len(nA)
+    N = int(np.sum(nA))
+    M = bg.V(K, mu)
+    Ncutoff = N + Ncut
+    ##
+    nbs = itprod(range(0,Ncutoff+1), repeat=K)
+    summed = 0.0
+    ##
+    eps = 1e-9
+    print("nA = ", nA)
+    for nb in nbs:
+        prob = np.abs(bg.bA(nb,nA,M))**2
+        summed += prob
+        if prob>=eps:
+            print(nb, "prob=% 8.6f, sum=% 5.3f"%(prob,summed))
+    print("nA = ", nA)
+    ##
+    print("N = ", N)
+    print("Ncutoff = ", Ncutoff)
+    print("remainder = %8.3e"%(1.0-summed))
+    print()
+
+
 
 ##### run #####
 ###############
 
 if __name__=="__main__":
-    test2()
+    test4()
 
