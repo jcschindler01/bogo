@@ -20,6 +20,7 @@ import numpy as np
 import itertools as it
 from collections import Counter
 from scipy.special import factorial as fac
+from multipermute import permutations as mperm
 
 
 ##### helper functions ######
@@ -56,17 +57,21 @@ def ab(na,nb,M):
 #     counts = list(counts.values())
 
     # version 2:
-    counts = Counter()
+#     counts = Counter()
 
-    for perm in it.permutations(sa):
-        counts[tuple(perm)] += 1
+#     for perm in it.permutations(sa):
+#         counts[tuple(perm)] += 1
 
-    unique_perms = np.array(list(counts.keys()))
-    counts = list(counts.values())
+#     unique_perms = np.array(list(counts.keys()))
+#     counts = list(counts.values())
+#     print('counts=')
+#     print(counts)
     
     facsa = np.array([fac(nai) for nai in na])
     facsb = np.array([fac(nbi) for nbi in nb])
     prefactor = 1/np.sqrt(np.prod(facsa)*np.prod(facsb))
+#     print('np.prod(fac(nb))=')
+#     print(np.prod(fac(nb)))
     
     sum_result = 0
     
@@ -85,8 +90,15 @@ def ab(na,nb,M):
 #         sum_result += counts[i]*r 
     
     #version 3:
-    for i,uni in enumerate(unique_perms):
-        sum_result += counts[i]*np.prod(np.array([RR[b,u] for b,u in zip(sb,uni)]))
+#     for i,uni in enumerate(unique_perms):
+#         sum_result += counts[i]*np.prod(np.array([RR[b,u] for b,u in zip(sb,uni)]))
+
+
+    # version multipermute
+    sym = np.prod(fac(nb))
+    
+    for bf in mperm(sb):
+        sum_result += sym*np.prod([RR[sa[z],bf[z]] for z in range(np.sum(na))])
     
 
     return prefactor*sum_result
