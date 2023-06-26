@@ -3,7 +3,7 @@
 import numpy as np
 import bogo as bg
 from itertools import product as itprod
-np.set_printoptions(precision=3, suppress=True)
+np.set_printoptions(precision=3, linewidth=999, suppress=True)
 
 ##### tests #####
 #################
