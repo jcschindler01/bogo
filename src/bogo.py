@@ -25,9 +25,19 @@ from multipermute import permutations as mperm
 
 ##### helper functions ######
 #############################
+
+def n_subspace(N,n):
+    '''Return states of length N whose elements add up to n.'''
+    states = np.array(list(it.product(np.arange(n+1),repeat=N)))
+    states_in_subspace = []
     
-
-
+    for state in states:
+        if np.sum(state)==n:
+            states_in_subspace.append(state)
+    subspace = np.array(states_in_subspace)
+    
+    return subspace 
+    
 
 
 ############## amplitudes #################
