@@ -1,6 +1,6 @@
 
 
-from bogo.amplitudes import ab, bA, aA, n_subspace
+from bogo.bogo import ab, bA, aA, n_subspace
 
 
 
